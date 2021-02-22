@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO getCategoryByName(String name) {
         var category = categoryRepository.findByName(name).orElseThrow(
-                () -> new RuntimeException("No category with such name"));
+                () -> new ResourceNotFoundException("No category with such name"));
         return categoryMapper.categoryToCategoryDTO(category);
     }
 }

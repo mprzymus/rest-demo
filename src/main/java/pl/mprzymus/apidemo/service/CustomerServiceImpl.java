@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO getCustomerById(Long id) {
         var customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No customer with id = " + id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("No customer with id = " + id.toString()));
         return convertToDto(customer);
     }
 
@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.setLastName(customerDTO.getLastName());
             }
             return convertToDto(customerRepository.save(customer));
-        }).orElseThrow(RuntimeException::new);
+        }).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
