@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.mprzymus.apidemo.api.mapper.CustomerMapper;
 import pl.mprzymus.apidemo.api.model.CustomerDTO;
 import pl.mprzymus.apidemo.api.model.CustomerListDTO;
+import pl.mprzymus.apidemo.domain.Customer;
 import pl.mprzymus.apidemo.repositories.CustomerRepository;
 
 import java.util.stream.Collectors;
@@ -20,13 +21,13 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO getCustomerById(Long id) {
         var customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No customer with id = " + id.toString()));
-        return customerMapper.customerToCustomerDTO(customer);
+        return convertToDto(customer);
     }
 
     @Override
     public CustomerListDTO getAllCustomers() {
         var list = customerRepository.findAll().stream()
-                .map(customerMapper::customerToCustomerDTO)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
         return new CustomerListDTO(list);
     }
@@ -35,8 +36,12 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
         var customer = customerMapper.customerDtoToCustomer(customerDTO);
         var saved = customerRepository.save(customer);
+        return convertToDto(saved);
+    }
+
+    private CustomerDTO convertToDto(Customer saved) {
         var toReturn = customerMapper.customerToCustomerDTO(saved);
-        toReturn.setCustomerUrl("/api/customer/" + saved.getId());
+        toReturn.setCustomerUrl("/api/customers/" + saved.getId());
         return toReturn;
     }
 }
