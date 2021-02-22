@@ -6,4 +6,5 @@ import pl.mprzymus.apidemo.api.model.CustomerListDTO;
 public interface CustomerService {
     CustomerDTO getCustomerById(Long id);
     CustomerListDTO getAllCustomers();
+    CustomerDTO createNewCustomer(CustomerDTO customerDTO);
 }

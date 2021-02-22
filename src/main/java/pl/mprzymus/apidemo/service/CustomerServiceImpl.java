@@ -30,4 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .collect(Collectors.toList());
         return new CustomerListDTO(list);
     }
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        var customer = customerMapper.customerDtoToCustomer(customerDTO);
+        var saved = customerRepository.save(customer);
+        var toReturn = customerMapper.customerToCustomerDTO(saved);
+        toReturn.setCustomerUrl("/api/customer/" + saved.getId());
+        return toReturn;
+    }
 }

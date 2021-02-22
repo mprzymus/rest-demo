@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.mprzymus.apidemo.api.mapper.CustomerMapper;
+import pl.mprzymus.apidemo.api.model.CustomerDTO;
 import pl.mprzymus.apidemo.domain.Customer;
 import pl.mprzymus.apidemo.repositories.CustomerRepository;
 
@@ -64,5 +65,25 @@ class CustomerServiceTest {
         var result = customerService.getAllCustomers();
 
         assertEquals(customersList.size(), result.getCustomers().size());
+    }
+
+    @Test
+    void createNewCustomer() {
+        var customerDto = new CustomerDTO();
+        customerDto.setFirstName(NAME);
+        customerDto.setLastName(LAST_NAME);
+
+        var savedCustomer = new Customer();
+        savedCustomer.setId(ID);
+        savedCustomer.setFirstName(customerDto.getFirstName());
+        savedCustomer.setLastName(customerDto.getLastName());
+
+        when(customerRepository.save(any())).thenReturn(savedCustomer);
+
+        var savedDto = customerService.createNewCustomer(customerDto);
+
+        assertEquals(customerDto.getFirstName(), savedDto.getFirstName());
+        assertEquals(customerDto.getLastName(), savedDto.getLastName());
+        assertEquals("/api/customer/"+ ID, savedDto.getCustomerUrl());
     }
 }
