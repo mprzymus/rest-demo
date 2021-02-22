@@ -63,6 +63,11 @@ public class CustomerServiceImpl implements CustomerService {
         }).orElseThrow(RuntimeException::new);
     }
 
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
+    }
+
     private CustomerDTO convertToDto(Customer saved) {
         var toReturn = customerMapper.customerToCustomerDTO(saved);
         toReturn.setCustomerUrl("/api/customers/" + saved.getId());
