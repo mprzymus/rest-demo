@@ -9,9 +9,10 @@ import pl.mprzymus.apidemo.api.model.CustomerListDTO;
 import pl.mprzymus.apidemo.service.CustomerService;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping(CustomerController.URL)
 @RequiredArgsConstructor
 public class CustomerController {
+    public static final String URL = "/api/customers";
     private final CustomerService customerService;
 
     @GetMapping

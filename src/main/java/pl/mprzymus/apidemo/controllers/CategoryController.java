@@ -14,9 +14,10 @@ import pl.mprzymus.apidemo.api.model.CategoryListDTO;
 import pl.mprzymus.apidemo.service.CategoryService;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(CategoryController.URL)
 @RequiredArgsConstructor
 public class CategoryController {
+    public static final String URL = "/api/categories";
     private final CategoryService categoryService;
 
     @GetMapping
