@@ -1,6 +1,5 @@
 package pl.mprzymus.apidemo.controllers;
 
-import com.sun.xml.bind.v2.model.core.ID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +30,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     public static final String FIRST_NAME = "Michale";
     public static final String LAST_NAME = "Weston";
     private static final Long ID = 1L;
-    public static final String URL = "/api/customer/";
+    public static final String URL = "/api/customers/";
     @Mock
     private CustomerService customerService;
 
@@ -123,12 +122,33 @@ class CustomerControllerTest extends AbstractRestControllerTest {
         when(customerService.saveOrUpdate(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
-        mockMvc.perform(put("/api/customers/1")
+        mockMvc.perform(put(URL+ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customer)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
-                .andExpect(jsonPath("$.customerUrl", equalTo("/api/customers/1")));
+                .andExpect(jsonPath("$.customerUrl", equalTo(URL+ID)));
+    }
+
+    @Test
+    void testPatchCustomer() throws Exception {
+        var customer = new CustomerDTO();
+        customer.setFirstName(FIRST_NAME);
+
+        var returnDTO = new CustomerDTO();
+        returnDTO.setFirstName(customer.getFirstName());
+        returnDTO.setLastName(LAST_NAME);
+        returnDTO.setCustomerUrl(URL+ID);
+
+        when(customerService.patchCustomer(anyLong(), any())).thenReturn(returnDTO);
+
+        mockMvc.perform(patch(URL+ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.customerUrl", equalTo(URL+ID)));
     }
 }
