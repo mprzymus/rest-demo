@@ -6,8 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pl.mprzymus.apidemo.domain.Category;
 import pl.mprzymus.apidemo.domain.Customer;
+import pl.mprzymus.apidemo.domain.Vendor;
 import pl.mprzymus.apidemo.repositories.CategoryRepository;
 import pl.mprzymus.apidemo.repositories.CustomerRepository;
+import pl.mprzymus.apidemo.repositories.VendorRepository;
 
 @Slf4j
 @Component
@@ -16,12 +18,26 @@ public class Bootstrap implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final CustomerRepository customerRepository;
+    private final VendorRepository vendorRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         generateCategories();
         generateCustomers();
+        generateVendors();
+    }
 
+    private void generateVendors() {
+        var vendor1 = new Vendor();
+        vendor1.setName("Vendor1");
+
+        var vendor2 = new Vendor();
+        vendor2.setName("Vendor2");
+
+        vendorRepository.save(vendor1);
+        vendorRepository.save(vendor2);
+
+        log.info("Vendors loaded = " + vendorRepository.count());
     }
 
     private void generateCustomers() {

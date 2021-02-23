@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.mprzymus.apidemo.api.mapper.CustomerMapper;
 import pl.mprzymus.apidemo.api.model.CustomerDTO;
 import pl.mprzymus.apidemo.api.model.CustomerListDTO;
+import pl.mprzymus.apidemo.controllers.CustomerController;
 import pl.mprzymus.apidemo.domain.Customer;
 import pl.mprzymus.apidemo.repositories.CustomerRepository;
 
@@ -70,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerDTO convertToDto(Customer saved) {
         var toReturn = customerMapper.customerToCustomerDTO(saved);
-        toReturn.setCustomerUrl("/api/customers/" + saved.getId());
+        toReturn.setCustomerUrl(CustomerController.URL + "/" + saved.getId());
         return toReturn;
     }
 }

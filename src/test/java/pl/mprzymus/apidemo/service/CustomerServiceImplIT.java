@@ -11,6 +11,7 @@ import pl.mprzymus.apidemo.api.model.CustomerDTO;
 import pl.mprzymus.apidemo.bootstrap.Bootstrap;
 import pl.mprzymus.apidemo.repositories.CategoryRepository;
 import pl.mprzymus.apidemo.repositories.CustomerRepository;
+import pl.mprzymus.apidemo.repositories.VendorRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,11 +27,14 @@ class CustomerServiceImplIT {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private VendorRepository vendorRepository;
+
     private CustomerService customerService;
 
     @BeforeEach
-    void setUp() throws Exception {
-        var bootstrap = new Bootstrap(categoryRepository, customerRepository);
+    void setUp() {
+        var bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
