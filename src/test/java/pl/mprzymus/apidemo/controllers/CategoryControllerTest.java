@@ -15,8 +15,7 @@ import pl.mprzymus.apidemo.service.ResourceNotFoundException;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,9 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryControllerTest {
+class CategoryControllerTest extends AbstractRestControllerTest{
     private static final String NAME = "name";
-    public static final String URL = CategoryController.URL + "/";
+    public static final String URL = "http://localhost" + CategoryController.URL + "/";
 
     @Mock
     private CategoryService categoryService;
@@ -60,7 +59,10 @@ class CategoryControllerTest {
         mockMvc.perform(get(URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.categories", hasSize(2)));
+                .andExpect(jsonPath("$.categories", hasSize(2)))
+                .andExpect(jsonPath("$..links[*].href", anything()))
+                .andExpect(jsonPath("$.links[0].href", equalTo(URL.substring(0, URL.length() - 1))))
+        ;
     }
 
     @Test
@@ -74,6 +76,7 @@ class CategoryControllerTest {
         mockMvc.perform(get(URL + NAME)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.links[0].href", equalTo(URL+NAME)))
                 .andExpect(jsonPath("$.name", equalTo(NAME)));
     }
 
